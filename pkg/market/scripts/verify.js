@@ -1,7 +1,7 @@
 const { verify } = require("@overnight-contracts/common/utils/verify-utils");
 
 async function main() {
-    let items = ["AerodromeCLZap"];
+    let items = ["Market", "WrappedUsdPlusToken"];
     await verify(items);
 }
 

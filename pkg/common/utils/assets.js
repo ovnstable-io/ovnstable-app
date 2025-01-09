@@ -462,44 +462,34 @@ let BLAST = {
     voter: "0x56129f1c0aed4adbee862986face5ba8c9ac3d9b"
 }
 
+let SONIC = {
+    usdcBridged: "0x29219dd400f2Bf60E5a23d13Be72B486D4038894",
+    weth: "0x50c42dEAcD8Fc9773493ED674b675bE577f2634b"
+};
+
 function getAsset(name) {
     let assets = getAssets(process.env.ETH_NETWORK);
     return assets[name];
 }
 
 function getAssets(network) {
-    let assets;
-    switch (network) {
-        case 'ARBITRUM':
-            assets = ARBITRUM;
-            break;
-        case 'BSC':
-            assets = BSC;
-            break;
-        case 'POLYGON':
-            assets = POLYGON;
-            break;
-        case "OPTIMISM":
-            assets = OPTIMISM;
-            break
-        case "ZKSYNC":
-            assets = ZKSYNC;
-            break
-        case "LINEA":
-            assets = LINEA;
-            break
-        case "BASE":
-            assets = BASE;
-            break
-        case "BLAST":
-            assets = BLAST;
-            break
-        default:
-            throw new Error('Unknown network');
-    }
+    const map = [
+        ['ARBITRUM', ARBITRUM], 
+        ['BSC', BSC],
+        ['POLYGON', POLYGON],
+        ['OPTIMISM', OPTIMISM],
+        ['ZKSYNC', ZKSYNC],
+        ['LINEA', LINEA],
+        ['BASE', BASE],
+        ['BLAST', BLAST],
+        ['SONIC', SONIC]
+    ];
 
+    const f = map.find(n => n[0] == network);
+    if (!f)
+        throw new Error('Unknown network');
 
-    return assets;
+    return f[1];
 }
 
 module.exports = {
@@ -511,6 +501,7 @@ module.exports = {
     LINEA: LINEA,
     OPTIMISM: OPTIMISM,
     BLAST: BLAST,
+    SONIC: SONIC,
     COMMON: COMMON,
     getAsset: getAsset,
 }

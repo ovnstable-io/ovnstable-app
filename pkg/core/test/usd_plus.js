@@ -7,12 +7,14 @@ const expectRevert = require("@overnight-contracts/common/utils/expectRevert");
 const {fromE18, fromE6, toE18, toE6} = require("@overnight-contracts/common/utils/decimals");
 const {sharedBeforeEach} = require("@overnight-contracts/common/utils/sharedBeforeEach");
 const { boolean } = require("hardhat/internal/core/params/argumentTypes");
+const { initWallet } = require("@overnight-contracts/common/utils/script-utils");
 
 
 describe("Token", function () {
 
     let usdPlus;
     let account;
+    let wallet;
 
     let user1;
     let user2;
@@ -32,12 +34,21 @@ describe("Token", function () {
 
         const {deployer} = await getNamedAccounts();
         account = deployer;
+
+        // This is set up for localhost testing.
+        await hre.network.provider.request({
+            method: 'hardhat_impersonateAccount',
+            params: [account],
+        });
+
+        wallet = await initWallet();
+
         user1 = await createRandomWallet();
         user2 = await createRandomWallet();
         user3 = await createRandomWallet();
         nonRebaseUser1 = await createRandomWallet();
         nonRebaseUser2 = await createRandomWallet();
-        usdPlus = await ethers.getContract("UsdPlusToken");
+        usdPlus = (await ethers.getContract("UsdPlusToken")).connect(wallet);
         await usdPlus.setExchanger(account);
         await usdPlus.setPayoutManager(account);
 
@@ -825,7 +836,7 @@ describe("Token", function () {
 
 
         this.beforeEach(async () => {
-            roleManager = await ethers.getContract('RoleManager')
+            roleManager = (await ethers.getContract('RoleManager')).connect(wallet);
             portfolioAgent = await createRandomWallet()
             const role = await roleManager.PORTFOLIO_AGENT_ROLE()
             await roleManager.grantRole(role, portfolioAgent.address)

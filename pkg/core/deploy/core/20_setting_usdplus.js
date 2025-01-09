@@ -12,7 +12,7 @@ module.exports = async ({getNamedAccounts, deployments}) => {
     const usdPlus = await ethers.getContract("UsdPlusToken", wallet);
     const exchange = await ethers.getContract("Exchange", wallet);
     const roleManager = await getContract("RoleManager");
-    const payoutManager = await getContract("ZkSyncPayoutManager");  // change for needed payout manager
+    const payoutManager = await getContract("SonicPayoutManager");  // change for needed payout manager
 
     console.log('usdPlus.setExchanger: ' + exchange.address)
     await (await usdPlus.setExchanger(exchange.address)).wait();

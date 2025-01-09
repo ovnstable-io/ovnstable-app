@@ -33,6 +33,9 @@ module.exports = async ({ deployments }) => {
         case "blast_usdc":
             params = { args: ["USDC+", "USDC+", 18] };
             break;
+        case "sonic":
+            params = { args: ["USD+", "USD+", 6] };
+            break;    
         default:
             params = { args: ["USD+", "USD+", 6] };
     }

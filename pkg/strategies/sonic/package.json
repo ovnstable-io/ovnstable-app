@@ -1,7 +1,7 @@
 {
-  "name": "@overnight-contracts/strategies-base",
+  "name": "@overnight-contracts/strategies-sonic",
   "version": "0.0.1",
-  "description": "Strategies BASE contracts",
+  "description": "Strategies SONIC contracts",
   "main": "hardhat.config",
   "directories": {
     "test": "test"

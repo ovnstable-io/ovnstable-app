@@ -208,6 +208,14 @@ function getNetworks() {
             zksync: false,
         },
 
+        sonic: {
+            url: node_url('sonic'),
+            accounts: accountsNetwork,
+            timeout: timeout,
+            gasPrice: "auto",
+            zksync: false,
+        },
+
         localhost: localhost,
 
         hardhat: {
@@ -218,28 +226,33 @@ function getNetworks() {
                 ignoreUnknownTxType: true,
             },
             // uncomment to fix history error
-            // chains: {
-            //     10: {
-            //         hardforkHistory: {
-            //             london: 121293553
-            //         }
-            //     },
-            //     8453: {
-            //         hardforkHistory: {
-            //             london: 23352161
-            //         }
-            //     },
-            //     59144: {
-            //         hardforkHistory: {
-            //             london: 6510720
-            //         }
-            //     },
-            //     81457: {
-            //         hardforkHistory: {
-            //             london: 11662782
-            //         }
-            //     }
-            // },
+            chains: {
+                10: {
+                    hardforkHistory: {
+                        london: 121293553
+                    }
+                },
+                146: {
+                    hardforkHistory: {
+                        london: 100
+                    }
+                },
+                8453: {
+                    hardforkHistory: {
+                        london: 23352161
+                    }
+                },
+                59144: {
+                    hardforkHistory: {
+                        london: 6510720
+                    }
+                },
+                81457: {
+                    hardforkHistory: {
+                        london: 11662782
+                    }
+                }
+            },
             accounts: {
                 accountsBalance: "100000000000000000000000000"
             },
@@ -375,7 +388,16 @@ function getEtherScan() {
                     apiURL: "https://api.blastscan.io/api",
                     browserURL: "https://blastscan.io/"
                 }
-            }
+            },
+            {
+                network: "sonic",
+                chainId: 146,
+                urls: {
+                    apiURL: "https://api.sonicscan.org/api",
+                    browserURL: "https://sonicscan.org/"
+                }
+            },
+            
         ]
 
     };
@@ -395,6 +417,7 @@ function getEtherScan() {
         arbitrum_dai: process.env[`ETHERSCAN_API_ARBITRUM`],
         blast: process.env[`ETHERSCAN_API_BLAST`],
         blast_usdc: process.env[`ETHERSCAN_API_BLAST`],
+        sonic: process.env[`ETHERSCAN_API_SONIC`],
     }
 
     return object;

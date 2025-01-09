@@ -11,7 +11,7 @@ module.exports = async () => {
     const m2m = await ethers.getContract("Mark2Market", wallet);
     const pm = await ethers.getContract("PortfolioManager", wallet);
     const roleManager = await getContract("RoleManager");
-    const payoutManager = await getContract("ZkSyncPayoutManager"); // change for needed payout manager
+    const payoutManager = await getContract("SonicPayoutManager"); // change for needed payout manager
 
     let asset = await getCoreAsset();
 

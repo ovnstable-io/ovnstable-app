@@ -407,7 +407,6 @@ async function getERC20ByAddress(address, wallet) {
 }
 
 async function getCoreAsset(stand = process.env.STAND) {
-
     if (stand === 'arbitrum_dai'
         || stand === 'base_dai'
         || stand === 'optimism_dai'
@@ -438,6 +437,9 @@ async function getCoreAsset(stand = process.env.STAND) {
 
     } else if (stand == "arbitrum") {
         return await getERC20("usdcCircle")
+
+    } else if (stand == "sonic") {
+        return await getERC20("usdcBridged")
 
     }
     else {

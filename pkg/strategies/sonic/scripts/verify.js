@@ -1,13 +1,9 @@
 const {verify } = require("@overnight-contracts/common/utils/verify-utils");
 
 async function main() {
-
-    let items = ["Exchange", "PortfolioManager","UsdPlusToken", "Mark2Market", "RoleManager", 
-        "SonicPayoutManager"    // specific for your chain
-    ];
+    let items = ["StrategyDummyHold"];
     await verify(items);
 }
-
 
 main()
     .then(() => process.exit(0))
