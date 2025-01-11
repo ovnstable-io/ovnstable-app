@@ -3,7 +3,7 @@ const axios = require('axios');
 const hre = require("hardhat");
 const path = require('path'),
     fs = require('fs');
-const { ARBITRUM, BASE, BSC, OPTIMISM, POLYGON, LINEA, ZKSYNC, BLAST, getDefault, getAsset, COMMON } = require("./assets");
+const { ARBITRUM, BASE, BSC, OPTIMISM, MODE, POLYGON, LINEA, ZKSYNC, BLAST, getDefault, getAsset, COMMON } = require("./assets");
 const { evmCheckpoint, evmRestore } = require("@overnight-contracts/common/utils/sharedBeforeEach");
 const BN = require('bn.js');
 const { fromAsset, toAsset, fromUsdPlus } = require("./decimals");
@@ -819,6 +819,8 @@ async function getChainId() {
             return 56;
         case "OPTIMISM":
             return 10;
+        case "MODE":
+            return 34443;
         case "POLYGON":
             return 137;
         case "ZKSYNC":
@@ -827,6 +829,8 @@ async function getChainId() {
             return 59144;
         case "BLAST":
             return 81457;
+        case "ETHEREUM":
+            return 1;
         default:
             throw new Error("Unknown chain");
     }

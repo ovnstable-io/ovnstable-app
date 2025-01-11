@@ -31,7 +31,7 @@ function node_url(networkName) {
 
 function getPrivateKey(networkName) {
     if (networkName) {
-        const pk = process.env['PK_' + networkName.toUpperCase()];
+        const pk = process.env['PK'];
         if (pk && pk !== '') {
             return pk;
         }
