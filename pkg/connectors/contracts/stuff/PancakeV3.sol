@@ -2,9 +2,9 @@
 pragma solidity ^0.8.0;
 pragma abicoder v2;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
-import "@openzeppelin/contracts/proxy/Clones.sol";
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
+import '@openzeppelin/contracts/proxy/Clones.sol';
 
 struct MintParams {
     address token0;
@@ -52,7 +52,6 @@ interface IPeripheryImmutableState {
 }
 
 interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableState {
-
     /// @notice Returns the position information associated with a given token ID.
     /// @dev Throws if the token ID is not valid.
     /// @param tokenId The ID of the token that represents the position
@@ -68,23 +67,25 @@ interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableS
     /// @return feeGrowthInside1LastX128 The fee growth of token1 as of the last action on the individual position
     /// @return tokensOwed0 The uncollected amount of token0 owed to the position as of the last computation
     /// @return tokensOwed1 The uncollected amount of token1 owed to the position as of the last computation
-    function positions(uint256 tokenId)
-    external
-    view
-    returns (
-        uint96 nonce,
-        address operator,
-        address token0,
-        address token1,
-        uint24 fee,
-        int24 tickLower,
-        int24 tickUpper,
-        uint128 liquidity,
-        uint256 feeGrowthInside0LastX128,
-        uint256 feeGrowthInside1LastX128,
-        uint128 tokensOwed0,
-        uint128 tokensOwed1
-    );
+    function positions(
+        uint256 tokenId
+    )
+        external
+        view
+        returns (
+            uint96 nonce,
+            address operator,
+            address token0,
+            address token1,
+            uint24 fee,
+            int24 tickLower,
+            int24 tickUpper,
+            uint128 liquidity,
+            uint256 feeGrowthInside0LastX128,
+            uint256 feeGrowthInside1LastX128,
+            uint128 tokensOwed0,
+            uint128 tokensOwed1
+        );
 
     /// @notice Creates a new position wrapped in a NFT
     /// @dev Call this when the pool does exist and is initialized. Note that if the pool is created but not initialized
@@ -94,15 +95,7 @@ interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableS
     /// @return liquidity The amount of liquidity for this position
     /// @return amount0 The amount of token0
     /// @return amount1 The amount of token1
-    function mint(MintParams calldata params)
-    external
-    payable
-    returns (
-        uint256 tokenId,
-        uint128 liquidity,
-        uint256 amount0,
-        uint256 amount1
-    );
+    function mint(MintParams calldata params) external payable returns (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1);
 
     /// @notice Increases the amount of liquidity in a position, with tokens paid by the `msg.sender`
     /// @param params tokenId The ID of the token for which liquidity is being increased,
@@ -114,14 +107,7 @@ interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableS
     /// @return liquidity The new liquidity amount as a result of the increase
     /// @return amount0 The amount of token0 to acheive resulting liquidity
     /// @return amount1 The amount of token1 to acheive resulting liquidity
-    function increaseLiquidity(IncreaseLiquidityParams calldata params)
-    external
-    payable
-    returns (
-        uint128 liquidity,
-        uint256 amount0,
-        uint256 amount1
-    );
+    function increaseLiquidity(IncreaseLiquidityParams calldata params) external payable returns (uint128 liquidity, uint256 amount0, uint256 amount1);
 
     /// @notice Decreases the amount of liquidity in a position and accounts it to the position
     /// @param params tokenId The ID of the token for which liquidity is being decreased,
@@ -131,10 +117,7 @@ interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableS
     /// deadline The time by which the transaction must be included to effect the change
     /// @return amount0 The amount of token0 accounted to the position's tokens owed
     /// @return amount1 The amount of token1 accounted to the position's tokens owed
-    function decreaseLiquidity(DecreaseLiquidityParams calldata params)
-    external
-    payable
-    returns (uint256 amount0, uint256 amount1);
+    function decreaseLiquidity(DecreaseLiquidityParams calldata params) external payable returns (uint256 amount0, uint256 amount1);
 
     /// @notice Collects up to a maximum amount of fees owed to a specific position to the recipient
     /// @param params tokenId The ID of the NFT for which tokens are being collected,
@@ -167,11 +150,7 @@ interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableS
     /// @param token The contract address of the token which will be transferred to `recipient`
     /// @param amountMinimum The minimum amount of token required for a transfer
     /// @param recipient The destination address of the token
-    function sweepToken(
-        address token,
-        uint256 amountMinimum,
-        address recipient
-    ) external payable;
+    function sweepToken(address token, uint256 amountMinimum, address recipient) external payable;
 
     function balanceOf(address account) external view returns (uint256);
 }
@@ -179,10 +158,7 @@ interface INonfungiblePositionManager is IERC721Enumerable, IPeripheryImmutableS
 interface ILMPool {
     function updatePosition(int24 tickLower, int24 tickUpper, int128 liquidityDelta) external;
 
-    function getRewardGrowthInside(
-        int24 tickLower,
-        int24 tickUpper
-    ) external view returns (uint256 rewardGrowthInsideX128);
+    function getRewardGrowthInside(int24 tickLower, int24 tickUpper) external view returns (uint256 rewardGrowthInsideX128);
 
     function accumulateReward(uint32 currTimestamp) external;
 }
@@ -196,17 +172,12 @@ interface IPancakeV3Factory {
     /// @param tokenB The contract address of the other token
     /// @param fee The fee collected upon every swap in the pool, denominated in hundredths of a bip
     /// @return pool The pool address
-    function getPool(
-        address tokenA,
-        address tokenB,
-        uint24 fee
-    ) external view returns (address pool);
+    function getPool(address tokenA, address tokenB, uint24 fee) external view returns (address pool);
 
     function poolDeployer() external view returns (address);
 }
 
 interface IMasterChefV3 {
-
     struct PoolInfo {
         uint256 allocPoint;
         // V3 pool address
@@ -288,9 +259,7 @@ interface IMasterChefV3 {
     /// @return liquidity The new liquidity amount as a result of the increase
     /// @return amount0 The amount of token0 to acheive resulting liquidity
     /// @return amount1 The amount of token1 to acheive resulting liquidity
-    function increaseLiquidity(
-        IncreaseLiquidityParams memory params
-    ) external payable returns (uint128 liquidity, uint256 amount0, uint256 amount1);
+    function increaseLiquidity(IncreaseLiquidityParams memory params) external payable returns (uint128 liquidity, uint256 amount0, uint256 amount1);
 
     /// @notice Decreases the amount of liquidity in a position and accounts it to the position
     /// @param params tokenId The ID of the token for which liquidity is being decreased,
@@ -300,9 +269,7 @@ interface IMasterChefV3 {
     /// deadline The time by which the transaction must be included to effect the change
     /// @return amount0 The amount of token0 accounted to the position's tokens owed
     /// @return amount1 The amount of token1 accounted to the position's tokens owed
-    function decreaseLiquidity(
-        DecreaseLiquidityParams memory params
-    ) external returns (uint256 amount0, uint256 amount1);
+    function decreaseLiquidity(DecreaseLiquidityParams memory params) external returns (uint256 amount0, uint256 amount1);
 
     /// @notice Collects up to a maximum amount of fees owed to a specific position to the recipient
     /// @param params tokenId The ID of the NFT for which tokens are being collected,
@@ -319,10 +286,7 @@ interface IMasterChefV3 {
     /// @param to Refund recipent.
     /// @return amount0 The amount of fees collected in token0
     /// @return amount1 The amount of fees collected in token1
-    function collectTo(
-        CollectParams memory params,
-        address to
-    ) external returns (uint256 amount0, uint256 amount1);
+    function collectTo(CollectParams memory params, address to) external returns (uint256 amount0, uint256 amount1);
 
     /// @notice Unwraps the contract's WETH9 balance and sends it to recipient as ETH.
     /// @dev The amountMinimum parameter prevents malicious contracts from stealing WETH9 from users.
@@ -363,11 +327,7 @@ library LiquidityAmounts {
     /// @param sqrtRatioBX96 A sqrt price representing the second tick boundary
     /// @param amount0 The amount0 being sent in
     /// @return liquidity The amount of returned liquidity
-    function getLiquidityForAmount0(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        uint256 amount0
-    ) internal pure returns (uint128 liquidity) {
+    function getLiquidityForAmount0(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, uint256 amount0) internal pure returns (uint128 liquidity) {
         if (sqrtRatioAX96 > sqrtRatioBX96) (sqrtRatioAX96, sqrtRatioBX96) = (sqrtRatioBX96, sqrtRatioAX96);
         uint256 intermediate = FullMath.mulDiv(sqrtRatioAX96, sqrtRatioBX96, FixedPoint96.Q96);
         return toUint128(FullMath.mulDiv(amount0, intermediate, sqrtRatioBX96 - sqrtRatioAX96));
@@ -379,11 +339,7 @@ library LiquidityAmounts {
     /// @param sqrtRatioBX96 A sqrt price representing the second tick boundary
     /// @param amount1 The amount1 being sent in
     /// @return liquidity The amount of returned liquidity
-    function getLiquidityForAmount1(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        uint256 amount1
-    ) internal pure returns (uint128 liquidity) {
+    function getLiquidityForAmount1(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, uint256 amount1) internal pure returns (uint128 liquidity) {
         if (sqrtRatioAX96 > sqrtRatioBX96) (sqrtRatioAX96, sqrtRatioBX96) = (sqrtRatioBX96, sqrtRatioAX96);
         return toUint128(FullMath.mulDiv(amount1, FixedPoint96.Q96, sqrtRatioBX96 - sqrtRatioAX96));
     }
@@ -422,19 +378,10 @@ library LiquidityAmounts {
     /// @param sqrtRatioBX96 A sqrt price representing the second tick boundary
     /// @param liquidity The liquidity being valued
     /// @return amount0 The amount of token0
-    function getAmount0ForLiquidity(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        uint128 liquidity
-    ) internal pure returns (uint256 amount0) {
+    function getAmount0ForLiquidity(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, uint128 liquidity) internal pure returns (uint256 amount0) {
         if (sqrtRatioAX96 > sqrtRatioBX96) (sqrtRatioAX96, sqrtRatioBX96) = (sqrtRatioBX96, sqrtRatioAX96);
 
-        return
-        FullMath.mulDiv(
-            uint256(liquidity) << FixedPoint96.RESOLUTION,
-            sqrtRatioBX96 - sqrtRatioAX96,
-            sqrtRatioBX96
-        ) / sqrtRatioAX96;
+        return FullMath.mulDiv(uint256(liquidity) << FixedPoint96.RESOLUTION, sqrtRatioBX96 - sqrtRatioAX96, sqrtRatioBX96) / sqrtRatioAX96;
     }
 
     /// @notice Computes the amount of token1 for a given amount of liquidity and a price range
@@ -442,11 +389,7 @@ library LiquidityAmounts {
     /// @param sqrtRatioBX96 A sqrt price representing the second tick boundary
     /// @param liquidity The liquidity being valued
     /// @return amount1 The amount of token1
-    function getAmount1ForLiquidity(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        uint128 liquidity
-    ) internal pure returns (uint256 amount1) {
+    function getAmount1ForLiquidity(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, uint128 liquidity) internal pure returns (uint256 amount1) {
         if (sqrtRatioAX96 > sqrtRatioBX96) (sqrtRatioAX96, sqrtRatioBX96) = (sqrtRatioBX96, sqrtRatioAX96);
 
         return FullMath.mulDiv(liquidity, sqrtRatioBX96 - sqrtRatioAX96, FixedPoint96.Q96);
@@ -500,7 +443,7 @@ library TickMath {
     /// at the given tick
     function getSqrtRatioAtTick(int24 tick) internal pure returns (uint160 sqrtPriceX96) {
         uint256 absTick = tick < 0 ? uint256(-int256(tick)) : uint256(int256(tick));
-//        require(absTick <= uint256(MAX_TICK), 'T');
+        //        require(absTick <= uint256(MAX_TICK), 'T');
 
         uint256 ratio = absTick & 0x1 != 0 ? 0xfffcb933bd6fad37aa2d162d1a594001 : 0x100000000000000000000000000000000;
         if (absTick & 0x2 != 0) ratio = (ratio * 0xfff97272373d413259a46990580e213a) >> 128;
@@ -678,7 +621,11 @@ library TickMath {
         int24 tickLow = int24((log_sqrt10001 - 3402992956809132418596140100660247210) >> 128);
         int24 tickHi = int24((log_sqrt10001 + 291339464771989622907027621153398088495) >> 128);
 
-        tick = tickLow == tickHi ? tickLow : getSqrtRatioAtTick(tickHi) <= sqrtPriceX96 ? tickHi : tickLow;
+        tick = tickLow == tickHi
+            ? tickLow
+            : getSqrtRatioAtTick(tickHi) <= sqrtPriceX96
+                ? tickHi
+                : tickLow;
     }
 }
 
@@ -692,11 +639,7 @@ library FullMath {
     /// @param denominator The divisor
     /// @return result The 256-bit result
     /// @dev Credit to Remco Bloemen under MIT license https://xn--2-umb.com/21/muldiv
-    function mulDiv(
-        uint256 a,
-        uint256 b,
-        uint256 denominator
-    ) internal pure returns (uint256 result) {
+    function mulDiv(uint256 a, uint256 b, uint256 denominator) internal pure returns (uint256 result) {
         // 512-bit multiply [prod1 prod0] = a * b
         // Compute the product mod 2**256 and mod 2**256 - 1
         // then use the Chinese Remainder Theorem to reconstruct
@@ -766,7 +709,7 @@ library FullMath {
             // modulo 2**256 such that denominator * inv = 1 mod 2**256.
             // Compute the inverse by starting with a seed that is correct
             // correct for four bits. That is, denominator * inv = 1 mod 2**4
-                uint256 inv = (3 * denominator) ^ 2;
+            uint256 inv = (3 * denominator) ^ 2;
             // Now use Newton-Raphson iteration to improve the precision.
             // Thanks to Hensel's lifting lemma, this also works in modular
             // arithmetic, doubling the correct bits in each step.
@@ -793,11 +736,7 @@ library FullMath {
     /// @param b The multiplier
     /// @param denominator The divisor
     /// @return result The 256-bit result
-    function mulDivRoundingUp(
-        uint256 a,
-        uint256 b,
-        uint256 denominator
-    ) internal pure returns (uint256 result) {
+    function mulDivRoundingUp(uint256 a, uint256 b, uint256 denominator) internal pure returns (uint256 result) {
         result = mulDiv(a, b, denominator);
         if (mulmod(a, b, denominator) > 0) {
             require(result < type(uint256).max);
@@ -831,12 +770,7 @@ library SqrtPriceMath {
     /// @param amount How much of token0 to add or remove from virtual reserves
     /// @param add Whether to add or remove the amount of token0
     /// @return The price after adding or removing amount, depending on add
-    function getNextSqrtPriceFromAmount0RoundingUp(
-        uint160 sqrtPX96,
-        uint128 liquidity,
-        uint256 amount,
-        bool add
-    ) internal pure returns (uint160) {
+    function getNextSqrtPriceFromAmount0RoundingUp(uint160 sqrtPX96, uint128 liquidity, uint256 amount, bool add) internal pure returns (uint160) {
         // we short circuit amount == 0 because the result is otherwise not guaranteed to equal the input price
         if (amount == 0) return sqrtPX96;
         uint256 numerator1 = uint256(liquidity) << FixedPoint96.RESOLUTION;
@@ -846,7 +780,7 @@ library SqrtPriceMath {
             if ((product = amount * sqrtPX96) / amount == sqrtPX96) {
                 uint256 denominator = numerator1 + product;
                 if (denominator >= numerator1)
-                // always fits in 160 bits
+                    // always fits in 160 bits
                     return uint160(FullMath.mulDivRoundingUp(numerator1, sqrtPX96, denominator));
             }
 
@@ -871,27 +805,20 @@ library SqrtPriceMath {
     /// @param amount How much of token1 to add, or remove, from virtual reserves
     /// @param add Whether to add, or remove, the amount of token1
     /// @return The price after adding or removing `amount`
-    function getNextSqrtPriceFromAmount1RoundingDown(
-        uint160 sqrtPX96,
-        uint128 liquidity,
-        uint256 amount,
-        bool add
-    ) internal pure returns (uint160) {
+    function getNextSqrtPriceFromAmount1RoundingDown(uint160 sqrtPX96, uint128 liquidity, uint256 amount, bool add) internal pure returns (uint160) {
         // if we're adding (subtracting), rounding down requires rounding the quotient down (up)
         // in both cases, avoid a mulDiv for most inputs
         if (add) {
             uint256 quotient = (
-            amount <= type(uint160).max
-            ? (amount << FixedPoint96.RESOLUTION) / liquidity
-            : FullMath.mulDiv(amount, FixedPoint96.Q96, liquidity)
+                amount <= type(uint160).max ? (amount << FixedPoint96.RESOLUTION) / liquidity : FullMath.mulDiv(amount, FixedPoint96.Q96, liquidity)
             );
 
             return uint256(sqrtPX96).add(quotient).toUint160();
         } else {
             uint256 quotient = (
-            amount <= type(uint160).max
-            ? UnsafeMath.divRoundingUp(amount << FixedPoint96.RESOLUTION, liquidity)
-            : FullMath.mulDivRoundingUp(amount, FixedPoint96.Q96, liquidity)
+                amount <= type(uint160).max
+                    ? UnsafeMath.divRoundingUp(amount << FixedPoint96.RESOLUTION, liquidity)
+                    : FullMath.mulDivRoundingUp(amount, FixedPoint96.Q96, liquidity)
             );
 
             require(sqrtPX96 > quotient);
@@ -907,20 +834,15 @@ library SqrtPriceMath {
     /// @param amountIn How much of token0, or token1, is being swapped in
     /// @param zeroForOne Whether the amount in is token0 or token1
     /// @return sqrtQX96 The price after adding the input amount to token0 or token1
-    function getNextSqrtPriceFromInput(
-        uint160 sqrtPX96,
-        uint128 liquidity,
-        uint256 amountIn,
-        bool zeroForOne
-    ) internal pure returns (uint160 sqrtQX96) {
+    function getNextSqrtPriceFromInput(uint160 sqrtPX96, uint128 liquidity, uint256 amountIn, bool zeroForOne) internal pure returns (uint160 sqrtQX96) {
         require(sqrtPX96 > 0);
         require(liquidity > 0);
 
         // round to make sure that we don't pass the target price
         return
-        zeroForOne
-        ? getNextSqrtPriceFromAmount0RoundingUp(sqrtPX96, liquidity, amountIn, true)
-        : getNextSqrtPriceFromAmount1RoundingDown(sqrtPX96, liquidity, amountIn, true);
+            zeroForOne
+                ? getNextSqrtPriceFromAmount0RoundingUp(sqrtPX96, liquidity, amountIn, true)
+                : getNextSqrtPriceFromAmount1RoundingDown(sqrtPX96, liquidity, amountIn, true);
     }
 
     /// @notice Gets the next sqrt price given an output amount of token0 or token1
@@ -930,20 +852,15 @@ library SqrtPriceMath {
     /// @param amountOut How much of token0, or token1, is being swapped out
     /// @param zeroForOne Whether the amount out is token0 or token1
     /// @return sqrtQX96 The price after removing the output amount of token0 or token1
-    function getNextSqrtPriceFromOutput(
-        uint160 sqrtPX96,
-        uint128 liquidity,
-        uint256 amountOut,
-        bool zeroForOne
-    ) internal pure returns (uint160 sqrtQX96) {
+    function getNextSqrtPriceFromOutput(uint160 sqrtPX96, uint128 liquidity, uint256 amountOut, bool zeroForOne) internal pure returns (uint160 sqrtQX96) {
         require(sqrtPX96 > 0);
         require(liquidity > 0);
 
         // round to make sure that we pass the target price
         return
-        zeroForOne
-        ? getNextSqrtPriceFromAmount1RoundingDown(sqrtPX96, liquidity, amountOut, false)
-        : getNextSqrtPriceFromAmount0RoundingUp(sqrtPX96, liquidity, amountOut, false);
+            zeroForOne
+                ? getNextSqrtPriceFromAmount1RoundingDown(sqrtPX96, liquidity, amountOut, false)
+                : getNextSqrtPriceFromAmount0RoundingUp(sqrtPX96, liquidity, amountOut, false);
     }
 
     /// @notice Gets the amount0 delta between two prices
@@ -954,12 +871,7 @@ library SqrtPriceMath {
     /// @param liquidity The amount of usable liquidity
     /// @param roundUp Whether to round the amount up or down
     /// @return amount0 Amount of token0 required to cover a position of size liquidity between the two passed prices
-    function getAmount0Delta(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        uint128 liquidity,
-        bool roundUp
-    ) internal pure returns (uint256 amount0) {
+    function getAmount0Delta(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, uint128 liquidity, bool roundUp) internal pure returns (uint256 amount0) {
         if (sqrtRatioAX96 > sqrtRatioBX96) (sqrtRatioAX96, sqrtRatioBX96) = (sqrtRatioBX96, sqrtRatioAX96);
 
         uint256 numerator1 = uint256(liquidity) << FixedPoint96.RESOLUTION;
@@ -968,12 +880,9 @@ library SqrtPriceMath {
         require(sqrtRatioAX96 > 0);
 
         return
-        roundUp
-        ? UnsafeMath.divRoundingUp(
-            FullMath.mulDivRoundingUp(numerator1, numerator2, sqrtRatioBX96),
-            sqrtRatioAX96
-        )
-        : FullMath.mulDiv(numerator1, numerator2, sqrtRatioBX96) / sqrtRatioAX96;
+            roundUp
+                ? UnsafeMath.divRoundingUp(FullMath.mulDivRoundingUp(numerator1, numerator2, sqrtRatioBX96), sqrtRatioAX96)
+                : FullMath.mulDiv(numerator1, numerator2, sqrtRatioBX96) / sqrtRatioAX96;
     }
 
     /// @notice Gets the amount1 delta between two prices
@@ -983,18 +892,13 @@ library SqrtPriceMath {
     /// @param liquidity The amount of usable liquidity
     /// @param roundUp Whether to round the amount up, or down
     /// @return amount1 Amount of token1 required to cover a position of size liquidity between the two passed prices
-    function getAmount1Delta(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        uint128 liquidity,
-        bool roundUp
-    ) internal pure returns (uint256 amount1) {
+    function getAmount1Delta(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, uint128 liquidity, bool roundUp) internal pure returns (uint256 amount1) {
         if (sqrtRatioAX96 > sqrtRatioBX96) (sqrtRatioAX96, sqrtRatioBX96) = (sqrtRatioBX96, sqrtRatioAX96);
 
         return
-        roundUp
-        ? FullMath.mulDivRoundingUp(liquidity, sqrtRatioBX96 - sqrtRatioAX96, FixedPoint96.Q96)
-        : FullMath.mulDiv(liquidity, sqrtRatioBX96 - sqrtRatioAX96, FixedPoint96.Q96);
+            roundUp
+                ? FullMath.mulDivRoundingUp(liquidity, sqrtRatioBX96 - sqrtRatioAX96, FixedPoint96.Q96)
+                : FullMath.mulDiv(liquidity, sqrtRatioBX96 - sqrtRatioAX96, FixedPoint96.Q96);
     }
 
     /// @notice Helper that gets signed token0 delta
@@ -1002,15 +906,11 @@ library SqrtPriceMath {
     /// @param sqrtRatioBX96 Another sqrt price
     /// @param liquidity The change in liquidity for which to compute the amount0 delta
     /// @return amount0 Amount of token0 corresponding to the passed liquidityDelta between the two prices
-    function getAmount0Delta(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        int128 liquidity
-    ) internal pure returns (int256 amount0) {
+    function getAmount0Delta(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, int128 liquidity) internal pure returns (int256 amount0) {
         return
-        liquidity < 0
-        ? -getAmount0Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(-liquidity), false).toInt256()
-        : getAmount0Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(liquidity), true).toInt256();
+            liquidity < 0
+                ? -getAmount0Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(-liquidity), false).toInt256()
+                : getAmount0Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(liquidity), true).toInt256();
     }
 
     /// @notice Helper that gets signed token1 delta
@@ -1018,15 +918,11 @@ library SqrtPriceMath {
     /// @param sqrtRatioBX96 Another sqrt price
     /// @param liquidity The change in liquidity for which to compute the amount1 delta
     /// @return amount1 Amount of token1 corresponding to the passed liquidityDelta between the two prices
-    function getAmount1Delta(
-        uint160 sqrtRatioAX96,
-        uint160 sqrtRatioBX96,
-        int128 liquidity
-    ) internal pure returns (int256 amount1) {
+    function getAmount1Delta(uint160 sqrtRatioAX96, uint160 sqrtRatioBX96, int128 liquidity) internal pure returns (int256 amount1) {
         return
-        liquidity < 0
-        ? -getAmount1Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(-liquidity), false).toInt256()
-        : getAmount1Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(liquidity), true).toInt256();
+            liquidity < 0
+                ? -getAmount1Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(-liquidity), false).toInt256()
+                : getAmount1Delta(sqrtRatioAX96, sqrtRatioBX96, uint128(liquidity), true).toInt256();
     }
 }
 
@@ -1051,7 +947,7 @@ library SafeCast {
     /// @param y The uint256 to be casted
     /// @return z The casted integer, now type int256
     function toInt256(uint256 y) internal pure returns (int256 z) {
-        require(y < 2**255);
+        require(y < 2 ** 255);
         z = int256(y);
     }
 }
@@ -1131,12 +1027,11 @@ library Util {
     }
 
     function priceToTicks(uint256[] memory priceRange, uint256 dec0, int24 tickSpacing) internal pure returns (int24 lowerTick, int24 upperTick) {
-
         lowerTick = TickMath.getTickAtSqrtRatio(Util.getSqrtRatioByPrice(priceRange[0], dec0));
         upperTick = TickMath.getTickAtSqrtRatio(Util.getSqrtRatioByPrice(priceRange[1], dec0));
 
         if (lowerTick % tickSpacing != 0) {
-            lowerTick = lowerTick > 0 ? lowerTick - lowerTick % tickSpacing : lowerTick - tickSpacing - (lowerTick % tickSpacing);
+            lowerTick = lowerTick > 0 ? lowerTick - (lowerTick % tickSpacing) : lowerTick - tickSpacing - (lowerTick % tickSpacing);
         }
         if (upperTick % tickSpacing != 0) {
             upperTick = upperTick > 0 ? upperTick + tickSpacing - (upperTick % tickSpacing) : upperTick - (upperTick % tickSpacing);
@@ -1162,7 +1057,6 @@ library Util {
 /// to the ERC20 specification
 /// @dev The pool interface is broken up into many smaller pieces
 interface IPancakeV3Pool {
-
     /// @notice The contract that deployed the pool, which must adhere to the IPancakeV3Factory interface
     /// @return The contract address
     function factory() external view returns (address);
@@ -1206,17 +1100,17 @@ interface IPancakeV3Pool {
     /// is the lower 4 bits. Used as the denominator of a fraction of the swap fee, e.g. 4 means 1/4th of the swap fee.
     /// unlocked Whether the pool is currently locked to reentrancy
     function slot0()
-    external
-    view
-    returns (
-        uint160 sqrtPriceX96,
-        int24 tick,
-        uint16 observationIndex,
-        uint16 observationCardinality,
-        uint16 observationCardinalityNext,
-        uint32 feeProtocol,
-        bool unlocked
-    );
+        external
+        view
+        returns (
+            uint160 sqrtPriceX96,
+            int24 tick,
+            uint16 observationIndex,
+            uint16 observationCardinality,
+            uint16 observationCardinalityNext,
+            uint32 feeProtocol,
+            bool unlocked
+        );
 
     /// @notice The fee growth as a Q128.128 fees of token0 collected per unit of liquidity for the entire life of the pool
     /// @dev This value can overflow the uint256
@@ -1248,19 +1142,21 @@ interface IPancakeV3Pool {
     /// Outside values can only be used if the tick is initialized, i.e. if liquidityGross is greater than 0.
     /// In addition, these values are only relative and must be used only in comparison to previous snapshots for
     /// a specific position.
-    function ticks(int24 tick)
-    external
-    view
-    returns (
-        uint128 liquidityGross,
-        int128 liquidityNet,
-        uint256 feeGrowthOutside0X128,
-        uint256 feeGrowthOutside1X128,
-        int56 tickCumulativeOutside,
-        uint160 secondsPerLiquidityOutsideX128,
-        uint32 secondsOutside,
-        bool initialized
-    );
+    function ticks(
+        int24 tick
+    )
+        external
+        view
+        returns (
+            uint128 liquidityGross,
+            int128 liquidityNet,
+            uint256 feeGrowthOutside0X128,
+            uint256 feeGrowthOutside1X128,
+            int56 tickCumulativeOutside,
+            uint160 secondsPerLiquidityOutsideX128,
+            uint32 secondsOutside,
+            bool initialized
+        );
 
     /// @notice Returns 256 packed tick initialized boolean values. See TickBitmap for more information
     function tickBitmap(int16 wordPosition) external view returns (uint256);
@@ -1272,16 +1168,9 @@ interface IPancakeV3Pool {
     /// Returns feeGrowthInside1LastX128 fee growth of token1 inside the tick range as of the last mint/burn/poke,
     /// Returns tokensOwed0 the computed amount of token0 owed to the position as of the last mint/burn/poke,
     /// Returns tokensOwed1 the computed amount of token1 owed to the position as of the last mint/burn/poke
-    function positions(bytes32 key)
-    external
-    view
-    returns (
-        uint128 _liquidity,
-        uint256 feeGrowthInside0LastX128,
-        uint256 feeGrowthInside1LastX128,
-        uint128 tokensOwed0,
-        uint128 tokensOwed1
-    );
+    function positions(
+        bytes32 key
+    ) external view returns (uint128 _liquidity, uint256 feeGrowthInside0LastX128, uint256 feeGrowthInside1LastX128, uint128 tokensOwed0, uint128 tokensOwed1);
 
     /// @notice Returns data about a specific observation index
     /// @param index The element of the observations array to fetch
@@ -1291,15 +1180,9 @@ interface IPancakeV3Pool {
     /// Returns tickCumulative the tick multiplied by seconds elapsed for the life of the pool as of the observation timestamp,
     /// Returns secondsPerLiquidityCumulativeX128 the seconds per in range liquidity for the life of the pool as of the observation timestamp,
     /// Returns initialized whether the observation has been initialized and the values are safe to use
-    function observations(uint256 index)
-    external
-    view
-    returns (
-        uint32 blockTimestamp,
-        int56 tickCumulative,
-        uint160 secondsPerLiquidityCumulativeX128,
-        bool initialized
-    );
+    function observations(
+        uint256 index
+    ) external view returns (uint32 blockTimestamp, int56 tickCumulative, uint160 secondsPerLiquidityCumulativeX128, bool initialized);
 
     /// @notice Returns the cumulative tick and liquidity as of each timestamp `secondsAgo` from the current block timestamp
     /// @dev To get a time weighted average tick or liquidity-in-range, you must call this with two values, one representing
@@ -1311,10 +1194,7 @@ interface IPancakeV3Pool {
     /// @return tickCumulatives Cumulative tick values as of each `secondsAgos` from the current block timestamp
     /// @return secondsPerLiquidityCumulativeX128s Cumulative seconds per liquidity-in-range value as of each `secondsAgos` from the current block
     /// timestamp
-    function observe(uint32[] calldata secondsAgos)
-    external
-    view
-    returns (int56[] memory tickCumulatives, uint160[] memory secondsPerLiquidityCumulativeX128s);
+    function observe(uint32[] calldata secondsAgos) external view returns (int56[] memory tickCumulatives, uint160[] memory secondsPerLiquidityCumulativeX128s);
 
     /// @notice Returns a snapshot of the tick cumulative, seconds per liquidity and seconds inside a tick range
     /// @dev Snapshots must only be compared to other snapshots, taken over a period for which a position existed.
@@ -1325,14 +1205,10 @@ interface IPancakeV3Pool {
     /// @return tickCumulativeInside The snapshot of the tick accumulator for the range
     /// @return secondsPerLiquidityInsideX128 The snapshot of seconds per liquidity for the range
     /// @return secondsInside The snapshot of seconds per liquidity for the range
-    function snapshotCumulativesInside(int24 tickLower, int24 tickUpper)
-    external
-    view
-    returns (
-        int56 tickCumulativeInside,
-        uint160 secondsPerLiquidityInsideX128,
-        uint32 secondsInside
-    );
+    function snapshotCumulativesInside(
+        int24 tickLower,
+        int24 tickUpper
+    ) external view returns (int56 tickCumulativeInside, uint160 secondsPerLiquidityInsideX128, uint32 secondsInside);
 
     /// @notice Sets the initial price for the pool
     /// @dev Price is represented as a sqrt(amountToken1/amountToken0) Q64.96 value
@@ -1350,13 +1226,7 @@ interface IPancakeV3Pool {
     /// @param data Any data that should be passed through to the callback
     /// @return amount0 The amount of token0 that was paid to mint the given amount of liquidity. Matches the value in the callback
     /// @return amount1 The amount of token1 that was paid to mint the given amount of liquidity. Matches the value in the callback
-    function mint(
-        address recipient,
-        int24 tickLower,
-        int24 tickUpper,
-        uint128 amount,
-        bytes calldata data
-    ) external returns (uint256 amount0, uint256 amount1);
+    function mint(address recipient, int24 tickLower, int24 tickUpper, uint128 amount, bytes calldata data) external returns (uint256 amount0, uint256 amount1);
 
     /// @notice Collects tokens owed to a position
     /// @dev Does not recompute fees earned, which must be done either via mint or burn of any amount of liquidity.
@@ -1386,11 +1256,7 @@ interface IPancakeV3Pool {
     /// @param amount How much liquidity to burn
     /// @return amount0 The amount of token0 sent to the recipient
     /// @return amount1 The amount of token1 sent to the recipient
-    function burn(
-        int24 tickLower,
-        int24 tickUpper,
-        uint128 amount
-    ) external returns (uint256 amount0, uint256 amount1);
+    function burn(int24 tickLower, int24 tickUpper, uint128 amount) external returns (uint256 amount0, uint256 amount1);
 
     /// @notice Swap token0 for token1, or token1 for token0
     /// @dev The caller of this method receives a callback in the form of IPancakeV3SwapCallback#pancakeV3SwapCallback
@@ -1418,12 +1284,7 @@ interface IPancakeV3Pool {
     /// @param amount0 The amount of token0 to send
     /// @param amount1 The amount of token1 to send
     /// @param data Any data to be passed through to the callback
-    function flash(
-        address recipient,
-        uint256 amount0,
-        uint256 amount1,
-        bytes calldata data
-    ) external;
+    function flash(address recipient, uint256 amount0, uint256 amount1, bytes calldata data) external;
 
     /// @notice Increase the maximum number of price and liquidity observations that this pool will store
     /// @dev This method is no-op if the pool already has an observationCardinalityNext greater than or equal to
@@ -1458,11 +1319,7 @@ library PositionValue {
     /// @param tokenId The tokenId of the token for which to get the total fees owed
     /// @return amount0 The amount of fees owed in token0
     /// @return amount1 The amount of fees owed in token1
-    function fees(INonfungiblePositionManager positionManager, uint256 tokenId)
-    internal
-    view
-    returns (uint256 amount0, uint256 amount1)
-    {
+    function fees(INonfungiblePositionManager positionManager, uint256 tokenId) internal view returns (uint256 amount0, uint256 amount1) {
         (
             ,
             ,
@@ -1478,62 +1335,57 @@ library PositionValue {
             uint256 tokensOwed1
         ) = positionManager.positions(tokenId);
 
-        return _fees(
-            positionManager,
-            FeeParams({
-                token0: token0,
-                token1: token1,
-                fee: fee,
-                tickLower: tickLower,
-                tickUpper: tickUpper,
-                liquidity: liquidity,
-                positionFeeGrowthInside0LastX128: positionFeeGrowthInside0LastX128,
-                positionFeeGrowthInside1LastX128: positionFeeGrowthInside1LastX128,
-                tokensOwed0: tokensOwed0,
-                tokensOwed1: tokensOwed1
-            })
-        );
+        return
+            _fees(
+                positionManager,
+                FeeParams({
+                    token0: token0,
+                    token1: token1,
+                    fee: fee,
+                    tickLower: tickLower,
+                    tickUpper: tickUpper,
+                    liquidity: liquidity,
+                    positionFeeGrowthInside0LastX128: positionFeeGrowthInside0LastX128,
+                    positionFeeGrowthInside1LastX128: positionFeeGrowthInside1LastX128,
+                    tokensOwed0: tokensOwed0,
+                    tokensOwed1: tokensOwed1
+                })
+            );
     }
 
-    function _fees(INonfungiblePositionManager positionManager, FeeParams memory feeParams)
-    private
-    view
-    returns (uint256 amount0, uint256 amount1)
-    {
+    function _fees(INonfungiblePositionManager positionManager, FeeParams memory feeParams) private view returns (uint256 amount0, uint256 amount1) {
         amount0 = feeParams.tokensOwed0;
         amount1 = feeParams.tokensOwed1;
         (uint256 poolFeeGrowthInside0LastX128, uint256 poolFeeGrowthInside1LastX128) = _getFeeGrowthInside(
-            IPancakeV3Pool(
-                IPancakeV3Factory(positionManager.factory()).getPool(
-                    feeParams.token0,
-                    feeParams.token1,
-                    feeParams.fee
-                )
-            ),
+            IPancakeV3Pool(IPancakeV3Factory(positionManager.factory()).getPool(feeParams.token0, feeParams.token1, feeParams.fee)),
             feeParams.tickLower,
             feeParams.tickUpper
         );
-        amount0 = amount0 + FullMath.mulDiv(
-            UnsafeMath.unsafe_sub(poolFeeGrowthInside0LastX128, feeParams.positionFeeGrowthInside0LastX128),
-            feeParams.liquidity,
-            FixedPoint128.Q128
-        );
+        amount0 =
+            amount0 +
+            FullMath.mulDiv(
+                UnsafeMath.unsafe_sub(poolFeeGrowthInside0LastX128, feeParams.positionFeeGrowthInside0LastX128),
+                feeParams.liquidity,
+                FixedPoint128.Q128
+            );
 
-        amount1 = amount1 + FullMath.mulDiv(
-            UnsafeMath.unsafe_sub(poolFeeGrowthInside1LastX128, feeParams.positionFeeGrowthInside1LastX128),
-            feeParams.liquidity,
-            FixedPoint128.Q128
-        );
+        amount1 =
+            amount1 +
+            FullMath.mulDiv(
+                UnsafeMath.unsafe_sub(poolFeeGrowthInside1LastX128, feeParams.positionFeeGrowthInside1LastX128),
+                feeParams.liquidity,
+                FixedPoint128.Q128
+            );
     }
 
-    function _getFeeGrowthInside(IPancakeV3Pool pool, int24 tickLower, int24 tickUpper)
-    private
-    view
-    returns (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128)
-    {
-        (, int24 tickCurrent,,,,,) = pool.slot0();
-        (,, uint256 lowerFeeGrowthOutside0X128, uint256 lowerFeeGrowthOutside1X128,,,,) = pool.ticks(tickLower);
-        (,, uint256 upperFeeGrowthOutside0X128, uint256 upperFeeGrowthOutside1X128,,,,) = pool.ticks(tickUpper);
+    function _getFeeGrowthInside(
+        IPancakeV3Pool pool,
+        int24 tickLower,
+        int24 tickUpper
+    ) private view returns (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128) {
+        (, int24 tickCurrent, , , , , ) = pool.slot0();
+        (, , uint256 lowerFeeGrowthOutside0X128, uint256 lowerFeeGrowthOutside1X128, , , , ) = pool.ticks(tickLower);
+        (, , uint256 upperFeeGrowthOutside0X128, uint256 upperFeeGrowthOutside1X128, , , , ) = pool.ticks(tickUpper);
         if (tickCurrent < tickLower) {
             feeGrowthInside0X128 = UnsafeMath.unsafe_sub(lowerFeeGrowthOutside0X128, upperFeeGrowthOutside0X128);
             feeGrowthInside1X128 = UnsafeMath.unsafe_sub(lowerFeeGrowthOutside1X128, upperFeeGrowthOutside1X128);
@@ -1541,7 +1393,7 @@ library PositionValue {
             uint256 feeGrowthGlobal0X128 = pool.feeGrowthGlobal0X128();
             uint256 feeGrowthGlobal1X128 = pool.feeGrowthGlobal1X128();
             feeGrowthInside0X128 = UnsafeMath.unsafe_sub(UnsafeMath.unsafe_sub(feeGrowthGlobal0X128, lowerFeeGrowthOutside0X128), upperFeeGrowthOutside0X128);
-            feeGrowthInside1X128 = UnsafeMath.unsafe_sub(UnsafeMath.unsafe_sub(feeGrowthGlobal1X128, lowerFeeGrowthOutside1X128),  upperFeeGrowthOutside1X128);
+            feeGrowthInside1X128 = UnsafeMath.unsafe_sub(UnsafeMath.unsafe_sub(feeGrowthGlobal1X128, lowerFeeGrowthOutside1X128), upperFeeGrowthOutside1X128);
         } else {
             feeGrowthInside0X128 = UnsafeMath.unsafe_sub(upperFeeGrowthOutside0X128, lowerFeeGrowthOutside0X128);
             feeGrowthInside1X128 = UnsafeMath.unsafe_sub(upperFeeGrowthOutside1X128, lowerFeeGrowthOutside1X128);
@@ -1586,12 +1438,7 @@ interface IV2SwapRouter {
     /// @param path The ordered list of tokens to swap through
     /// @param to The recipient address
     /// @return amountOut The amount of the received token
-    function swapExactTokensForTokens(
-        uint256 amountIn,
-        uint256 amountOutMin,
-        address[] calldata path,
-        address to
-    ) external payable returns (uint256 amountOut);
+    function swapExactTokensForTokens(uint256 amountIn, uint256 amountOutMin, address[] calldata path, address to) external payable returns (uint256 amountOut);
 
     /// @notice Swaps as little as possible of one token for an exact amount of another token
     /// @param amountOut The amount of token to swap for
@@ -1599,12 +1446,7 @@ interface IV2SwapRouter {
     /// @param path The ordered list of tokens to swap through
     /// @param to The recipient address
     /// @return amountIn The amount of token to pay
-    function swapTokensForExactTokens(
-        uint256 amountOut,
-        uint256 amountInMax,
-        address[] calldata path,
-        address to
-    ) external payable returns (uint256 amountIn);
+    function swapTokensForExactTokens(uint256 amountOut, uint256 amountInMax, address[] calldata path, address to) external payable returns (uint256 amountIn);
 }
 
 /// @title Callback for IPancakeV3PoolActions#swap
@@ -1619,11 +1461,7 @@ interface IPancakeV3SwapCallback {
     /// @param amount1Delta The amount of token1 that was sent (negative) or must be received (positive) by the pool by
     /// the end of the swap. If positive, the callback must send that amount of token1 to the pool.
     /// @param data Any data passed through by the caller via the IPancakeV3PoolActions#swap call
-    function pancakeV3SwapCallback(
-        int256 amount0Delta,
-        int256 amount1Delta,
-        bytes calldata data
-    ) external;
+    function pancakeV3SwapCallback(int256 amount0Delta, int256 amount1Delta, bytes calldata data) external;
 }
 
 /// @title Router token swapping functionality
@@ -1690,8 +1528,7 @@ interface IV3SwapRouter is IPancakeV3SwapCallback {
     function exactOutput(ExactOutputParams calldata params) external payable returns (uint256 amountIn);
 }
 
-interface ISmartRouter is IStableSwapRouter, IV2SwapRouter, IV3SwapRouter {
-}
+interface ISmartRouter is IStableSwapRouter, IV2SwapRouter, IV3SwapRouter {}
 
 interface IWbnb {
     function deposit() external payable;
@@ -1699,7 +1536,6 @@ interface IWbnb {
 }
 
 library PancakeSwapV3Library {
-
     function singleSwap(
         address smartRouter,
         address tokenIn,
@@ -1709,7 +1545,6 @@ library PancakeSwapV3Library {
         uint256 amountIn,
         uint256 amountOutMinimum
     ) internal returns (uint256 amountOut) {
-
         IERC20(tokenIn).approve(smartRouter, amountIn);
 
         IV3SwapRouter.ExactInputSingleParams memory params = IV3SwapRouter.ExactInputSingleParams({
@@ -1736,7 +1571,6 @@ library PancakeSwapV3Library {
         uint256 amountIn,
         uint256 amountOutMinimum
     ) internal returns (uint256 amountOut) {
-
         IERC20(tokenIn).approve(smartRouter, amountIn);
 
         IV3SwapRouter.ExactInputParams memory params = IV3SwapRouter.ExactInputParams({
@@ -1757,7 +1591,6 @@ library PancakeSwapV3Library {
         uint256 amountIn,
         uint256 amountOutMinimum
     ) internal returns (uint256 amountOut) {
-
         IERC20(tokenIn).approve(smartRouter, amountIn);
 
         IV3SwapRouter.ExactInputParams memory params = IV3SwapRouter.ExactInputParams({
@@ -1768,6 +1601,37 @@ library PancakeSwapV3Library {
         });
 
         amountOut = ISmartRouter(smartRouter).exactInput(params);
+    }
+
+    function quoteSingleSwap(address quoterV2, address tokenIn, address tokenOut, uint24 fee, uint256 amountIn) internal returns (uint256 amountOut) {
+        IQuoterV2.QuoteExactInputSingleParams memory params = IQuoterV2.QuoteExactInputSingleParams({
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
+            amountIn: amountIn,
+            fee: fee,
+            sqrtPriceLimitX96: 0
+        });
+
+        (amountOut, , , ) = IQuoterV2(quoterV2).quoteExactInputSingle(params);
+    }
+
+    function quoteMultiSwap(
+        address quoterV2,
+        address tokenIn,
+        address tokenMid,
+        address tokenOut,
+        uint24 fee0,
+        uint24 fee1,
+        uint256 amountIn
+    ) internal returns (uint256 amountOut) {
+        // Encode the path for multi-hop swap
+        bytes memory path = abi.encodePacked(tokenIn, fee0, tokenMid, fee1, tokenOut);
+
+        (amountOut, , , ) = IQuoterV2(quoterV2).quoteExactInput(path, amountIn);
+    }
+
+    function quotePath(address quoterV2, bytes memory path, uint256 amountIn) internal returns (uint256 amountOut) {
+        (amountOut, , , ) = IQuoterV2(quoterV2).quoteExactInput(path, amountIn);
     }
 }
 
@@ -1787,7 +1651,7 @@ library PoolAddress {
     /// @return Poolkey The pool details with ordered token0 and token1 assignments
     function getPoolKey(address tokenA, address tokenB, int24 tickSpacing) internal pure returns (PoolKey memory) {
         if (tokenA > tokenB) (tokenA, tokenB) = (tokenB, tokenA);
-        return PoolKey({token0: tokenA, token1: tokenB, tickSpacing: tickSpacing});
+        return PoolKey({ token0: tokenA, token1: tokenB, tickSpacing: tickSpacing });
     }
 
     /// @notice Deterministically computes the pool address given the factory and PoolKey
@@ -1811,21 +1675,89 @@ library CallbackValidation {
         uint24 fee;
     }
 
-    function verifyCallback(
-        address factory,
-        address tokenA,
-        address tokenB,
-        uint24 fee
-    ) internal view returns (IPancakeV3Pool pool) {
-        return verifyCallback(factory, PoolKey({token0: tokenA, token1: tokenB, fee: fee}));
+    function verifyCallback(address factory, address tokenA, address tokenB, uint24 fee) internal view returns (IPancakeV3Pool pool) {
+        return verifyCallback(factory, PoolKey({ token0: tokenA, token1: tokenB, fee: fee }));
     }
 
-    function verifyCallback(address factory, PoolKey memory poolKey)
-        internal
-        view
-        returns (IPancakeV3Pool pool)
-    {   
+    function verifyCallback(address factory, PoolKey memory poolKey) internal view returns (IPancakeV3Pool pool) {
         pool = IPancakeV3Pool(IPancakeV3Factory(factory).getPool(poolKey.token0, poolKey.token1, poolKey.fee));
-        require(msg.sender == address(pool), "swap validation failed");
+        require(msg.sender == address(pool), 'swap validation failed');
     }
+}
+
+/// @title QuoterV2 Interface
+/// @notice Supports quoting the calculated amounts from exact input or exact output swaps.
+/// @notice For each pool also tells you the number of initialized ticks crossed and the sqrt price of the pool after the swap.
+/// @dev These functions are not marked view because they rely on calling non-view functions and reverting
+/// to compute the result. They are also not gas efficient and should not be called on-chain.
+abstract contract IQuoterV2 {
+    /// @notice Returns the amount out received for a given exact input swap without executing the swap
+    /// @param path The path of the swap, i.e. each token pair and the pool fee
+    /// @param amountIn The amount of the first token to swap
+    /// @return amountOut The amount of the last token that would be received
+    /// @return sqrtPriceX96AfterList List of the sqrt price after the swap for each pool in the path
+    /// @return initializedTicksCrossedList List of the initialized ticks that the swap crossed for each pool in the path
+    /// @return gasEstimate The estimate of the gas that the swap consumes
+    function quoteExactInput(
+        bytes memory path,
+        uint256 amountIn
+    ) external virtual returns (uint256 amountOut, uint160[] memory sqrtPriceX96AfterList, uint32[] memory initializedTicksCrossedList, uint256 gasEstimate);
+
+    struct QuoteExactInputSingleParams {
+        address tokenIn;
+        address tokenOut;
+        uint256 amountIn;
+        uint24 fee;
+        uint160 sqrtPriceLimitX96;
+    }
+
+    /// @notice Returns the amount out received for a given exact input but for a swap of a single pool
+    /// @param params The params for the quote, encoded as `QuoteExactInputSingleParams`
+    /// tokenIn The token being swapped in
+    /// tokenOut The token being swapped out
+    /// fee The fee of the token pool to consider for the pair
+    /// amountIn The desired input amount
+    /// sqrtPriceLimitX96 The price limit of the pool that cannot be exceeded by the swap
+    /// @return amountOut The amount of `tokenOut` that would be received
+    /// @return sqrtPriceX96After The sqrt price of the pool after the swap
+    /// @return initializedTicksCrossed The number of initialized ticks that the swap crossed
+    /// @return gasEstimate The estimate of the gas that the swap consumes
+    function quoteExactInputSingle(
+        QuoteExactInputSingleParams memory params
+    ) external virtual returns (uint256 amountOut, uint160 sqrtPriceX96After, uint32 initializedTicksCrossed, uint256 gasEstimate);
+
+    /// @notice Returns the amount in required for a given exact output swap without executing the swap
+    /// @param path The path of the swap, i.e. each token pair and the pool fee. Path must be provided in reverse order
+    /// @param amountOut The amount of the last token to receive
+    /// @return amountIn The amount of first token required to be paid
+    /// @return sqrtPriceX96AfterList List of the sqrt price after the swap for each pool in the path
+    /// @return initializedTicksCrossedList List of the initialized ticks that the swap crossed for each pool in the path
+    /// @return gasEstimate The estimate of the gas that the swap consumes
+    function quoteExactOutput(
+        bytes memory path,
+        uint256 amountOut
+    ) external virtual returns (uint256 amountIn, uint160[] memory sqrtPriceX96AfterList, uint32[] memory initializedTicksCrossedList, uint256 gasEstimate);
+
+    struct QuoteExactOutputSingleParams {
+        address tokenIn;
+        address tokenOut;
+        uint256 amount;
+        uint24 fee;
+        uint160 sqrtPriceLimitX96;
+    }
+
+    /// @notice Returns the amount in required to receive the given exact output amount but for a swap of a single pool
+    /// @param params The params for the quote, encoded as `QuoteExactOutputSingleParams`
+    /// tokenIn The token being swapped in
+    /// tokenOut The token being swapped out
+    /// fee The fee of the token pool to consider for the pair
+    /// amountOut The desired output amount
+    /// sqrtPriceLimitX96 The price limit of the pool that cannot be exceeded by the swap
+    /// @return amountIn The amount required as the input for the swap in order to receive `amountOut`
+    /// @return sqrtPriceX96After The sqrt price of the pool after the swap
+    /// @return initializedTicksCrossed The number of initialized ticks that the swap crossed
+    /// @return gasEstimate The estimate of the gas that the swap consumes
+    function quoteExactOutputSingle(
+        QuoteExactOutputSingleParams memory params
+    ) external virtual returns (uint256 amountIn, uint160 sqrtPriceX96After, uint32 initializedTicksCrossed, uint256 gasEstimate);
 }

@@ -1,60 +1,23 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts/interfaces/IERC721Metadata.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import '@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol';
+import '@openzeppelin/contracts/interfaces/IERC721Metadata.sol';
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 interface AggregatorV3Interface {
+    function decimals() external view returns (uint8);
 
-  function decimals()
-    external
-    view
-    returns (
-      uint8
-    );
+    function description() external view returns (string memory);
 
-  function description()
-    external
-    view
-    returns (
-      string memory
-    );
+    function version() external view returns (uint256);
 
-  function version()
-    external
-    view
-    returns (
-      uint256
-    );
+    // getRoundData and latestRoundData should both raise "No data present"
+    // if they do not have data to report, instead of returning unset values
+    // which could be misinterpreted as actual reported values.
+    function getRoundData(uint80 _roundId) external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
 
-  // getRoundData and latestRoundData should both raise "No data present"
-  // if they do not have data to report, instead of returning unset values
-  // which could be misinterpreted as actual reported values.
-  function getRoundData(
-    uint80 _roundId
-  )
-    external
-    view
-    returns (
-      uint80 roundId,
-      int256 answer,
-      uint256 startedAt,
-      uint256 updatedAt,
-      uint80 answeredInRound
-    );
-
-  function latestRoundData()
-    external
-    view
-    returns (
-      uint80 roundId,
-      int256 answer,
-      uint256 startedAt,
-      uint256 updatedAt,
-      uint80 answeredInRound
-    );
-
+    function latestRoundData() external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
 }
 
 /// @title IFlashAngle
@@ -87,7 +50,6 @@ interface IFlashAngle {
     /// @dev This function can only be called by the `CoreBorrow` contract
     function setCore(address _core) external;
 }
-
 
 /// @title ICoreBorrow
 /// @author Angle Labs, Inc.
@@ -137,11 +99,7 @@ interface IAgToken is IERC20Upgradeable {
     /// @dev This method is to be called by a contract with the minter right after being requested
     /// to do so by a `sender` address willing to burn tokens from another `burner` address
     /// @dev The method checks the allowance between the `sender` and the `burner`
-    function burnFrom(
-        uint256 amount,
-        address burner,
-        address sender
-    ) external;
+    function burnFrom(uint256 amount, address burner, address sender) external;
 
     /// @notice Burns `amount` tokens from a `burner` address
     /// @param amount Amount of tokens to burn
@@ -343,12 +301,7 @@ interface IVaultManagerFunctions {
     /// @param senderRepayFee Repay fees from the contract which requested this: this is to make sure that people are not arbitraging
     /// differences in repay fees
     /// @dev This function can only be called from a vaultManager registered in the same Treasury
-    function getDebtOut(
-        uint256 vaultID,
-        uint256 amountStablecoins,
-        uint256 senderBorrowFee,
-        uint256 senderRepayFee
-    ) external;
+    function getDebtOut(uint256 vaultID, uint256 amountStablecoins, uint256 senderBorrowFee, uint256 senderRepayFee) external;
 
     /// @notice Gets the current debt of a vault
     /// @param vaultID ID of the vault to check
@@ -400,12 +353,7 @@ interface IVaultManagerFunctions {
 
     /// @notice This function is a wrapper built on top of the function above. It enables users to interact with the contract
     /// without having to provide `who` and `repayData` parameters
-    function angle(
-        AngleActionType[] memory actions,
-        bytes[] memory datas,
-        address from,
-        address to
-    ) external returns (PaymentData memory paymentData);
+    function angle(AngleActionType[] memory actions, bytes[] memory datas, address from, address to) external returns (PaymentData memory paymentData);
 
     /// @notice Initializes the `VaultManager` contract
     /// @param _treasury Treasury address handling the contract
@@ -416,13 +364,7 @@ interface IVaultManagerFunctions {
     /// contract has been initialized
     /// @dev For the contract to be fully initialized, governance needs to set the parameters for the liquidation
     /// boost
-    function initialize(
-        ITreasury _treasury,
-        IERC20 _collateral,
-        IOracle _oracle,
-        VaultParameters calldata params,
-        string memory _symbol
-    ) external;
+    function initialize(ITreasury _treasury, IERC20 _collateral, IOracle _oracle, VaultParameters calldata params, string memory _symbol) external;
 
     /// @notice Minimum amount of debt a vault can have, expressed in `BASE_TOKENS` that is to say the base of the agTokens
     function dust() external view returns (uint256);
@@ -487,21 +429,18 @@ interface IVaultManagerListing is IVaultManager {
     function getUserCollateral(address user) external view returns (uint256);
 }
 
-
 /**
  * @title IPoolAddressesProvider
  * @author Aave
  * @notice Defines the basic interface for a Pool Addresses Provider.
  **/
 interface IPoolAddressesProvider {
-
     /**
      * @notice Returns the address of the price oracle.
-   * @return The address of the PriceOracle
-   */
+     * @return The address of the PriceOracle
+     */
     function getPriceOracle() external view returns (address);
 }
-
 
 /// @title AaveOracle
 /// @author Aave
@@ -511,7 +450,6 @@ interface IPoolAddressesProvider {
 /// - Owned by the Aave governance system, allowed to add sources for assets, replace them
 ///   and change the fallbackOracle
 interface IAaveOracle {
-
     event BaseCurrencySet(address indexed baseCurrency, uint256 baseCurrencyUnit);
     event AssetSourceUpdated(address indexed asset, address indexed source);
     event FallbackOracleUpdated(address indexed fallbackOracle);
@@ -549,32 +487,68 @@ interface IAaveOracle {
 }
 
 interface IDistributor {
-  function toggleOperator(address user, address operator) external;
+    function toggleOperator(address user, address operator) external;
 }
 
 abstract contract Distributor {
+    struct Claim {
+        uint208 amount;
+        uint48 timestamp;
+    }
 
-  struct Claim {
-    uint208 amount;
-    uint48 timestamp;
-  }
+    /// @notice Mapping user -> token -> amount to track claimed amounts
+    mapping(address => mapping(address => Claim)) public claimed;
 
-  /// @notice Mapping user -> token -> amount to track claimed amounts
-  mapping(address => mapping(address => Claim)) public claimed;
+    /// @notice Claims rewards for a given set of users
+    /// @dev Anyone may call this function for anyone else, funds go to destination regardless, it's just a question of
+    /// who provides the proof and pays the gas: `msg.sender` is used only for addresses that require a trusted operator
+    /// @param users Recipient of tokens
+    /// @param tokens ERC20 claimed
+    /// @param amounts Amount of tokens that will be sent to the corresponding users
+    /// @param proofs Array of hashes bridging from a leaf `(hash of user | token | amount)` to the Merkle root
+    function claim(address[] calldata users, address[] calldata tokens, uint256[] calldata amounts, bytes32[][] calldata proofs) external virtual;
+}
 
-  /// @notice Claims rewards for a given set of users
-  /// @dev Anyone may call this function for anyone else, funds go to destination regardless, it's just a question of
-  /// who provides the proof and pays the gas: `msg.sender` is used only for addresses that require a trusted operator
-  /// @param users Recipient of tokens
-  /// @param tokens ERC20 claimed
-  /// @param amounts Amount of tokens that will be sent to the corresponding users
-  /// @param proofs Array of hashes bridging from a leaf `(hash of user | token | amount)` to the Merkle root
-  function claim(
-    address[] calldata users,
-    address[] calldata tokens,
-    uint256[] calldata amounts,
-    bytes32[][] calldata proofs
-  ) external virtual;
+struct CampaignParameters {
+    // POPULATED ONCE CREATED
 
+    // ID of the campaign. This can be left as a null bytes32 when creating campaigns
+    // on Merkl.
+    bytes32 campaignId;
+    // CHOSEN BY CAMPAIGN CREATOR
 
+    // Address of the campaign creator, if marked as address(0), it will be overriden with the
+    // address of the `msg.sender` creating the campaign
+    address creator;
+    // Address of the token used as a reward
+    address rewardToken;
+    // Amount of `rewardToken` to distribute across all the epochs
+    // Amount distributed per epoch is `amount/numEpoch`
+    uint256 amount;
+    // Type of campaign
+    uint32 campaignType;
+    // Timestamp at which the campaign should start
+    uint32 startTimestamp;
+    // Duration of the campaign in seconds. Has to be a multiple of EPOCH = 3600
+    uint32 duration;
+    // Extra data to pass to specify the campaign
+    bytes campaignData;
+}
+
+abstract contract DistributionCreator {
+    /// @notice Allows a user to accept the conditions without signing the message
+    /// @dev Users may either call `acceptConditions` here or `sign` the message
+    function acceptConditions() external virtual;
+
+    /// @notice Maps a token to the minimum amount that must be sent per epoch for a distribution to be valid
+    /// @dev If `rewardTokenMinAmounts[token] == 0`, then `token` cannot be used as a reward
+    mapping(address => uint256) public rewardTokenMinAmounts;
+
+    /// @notice Creates a `campaign` to incentivize a given pool for a specific period of time
+    /// @return The campaignId of the new campaign
+    /// @dev If the campaign is badly specified, it will not be handled by the campaign script and rewards may be lost
+    /// @dev Reward tokens sent as part of campaigns must have been whitelisted before and amounts
+    /// sent should be bigger than a minimum amount specific to each token
+    /// @dev This function reverts if the sender has not accepted the terms and conditions
+    function createCampaign(CampaignParameters memory newCampaign) external virtual returns (bytes32);
 }
