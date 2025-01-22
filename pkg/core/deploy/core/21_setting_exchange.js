@@ -11,7 +11,7 @@ module.exports = async () => {
     const m2m = await ethers.getContract("Mark2Market", wallet);
     const pm = await ethers.getContract("PortfolioManager", wallet);
     const roleManager = await getContract("RoleManager");
-    const payoutManager = await getContract("ZkSyncPayoutManager"); // change for needed payout manager
+    //const payoutManager = await getContract("ZkSyncPayoutManager"); // change for needed payout manager
 
     let asset = await getCoreAsset();
 
@@ -34,9 +34,9 @@ module.exports = async () => {
     await (await exchange.setRoleManager(roleManager.address)).wait();
     console.log("exchange.setRoleManager done");
 
-    console.log(`exchange.setPayoutManager: ${payoutManager.address}`);
-    await (await exchange.setPayoutManager(payoutManager.address)).wait();
-    console.log('exchange.setPayoutManager done');
+    // console.log(`exchange.setPayoutManager: ${payoutManager.address}`);
+    // await (await exchange.setPayoutManager(payoutManager.address)).wait();
+    // console.log('exchange.setPayoutManager done');
 
     console.log(`exchange.setProfitRecipient: ${COMMON.rewardWallet}`);
     await (await exchange.setProfitRecipient(COMMON.rewardWallet)).wait();

@@ -4,7 +4,7 @@ This repository contains all contracts Overnight
 
 ##### Requirement:
 
-- Node v16
+- Node v22.13.0 (v16 does not work anymore on contracts compilation)
 - yarn v1.22.18
 
 ## README navigation
@@ -71,6 +71,7 @@ This repository contains is next modules:
 1. Set in .env file your parameters and check actual gas price in gas station.
 2. Deploy core and setting in pkg/core
    npx hardhat deploy --tags base,setting --network bsc_usdt
+   (upd. Jan 2025 - better to run deploy scripts one-by-one by setting appropriate tags - more control over process)
 3. Run base setting in pkg/core
    npx hardhat run scripts/base-setting.js --network bsc_usdt
 4. Verify core in pkg/core and verify it on scan service.

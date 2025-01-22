@@ -14,6 +14,8 @@ module.exports = async ({deployments}) => {
 
     if (hre.network.name === "optimism_dai") {
         params = {args: [usdPlusToken.address, "Wrapped DAI+", "wDAI+", 18, roleManager.address]};
+    } else if (hre.network.name === "base_ovn") {
+        params = {args: [usdPlusToken.address, "Wrapped OVN+", "wOVN+", 18, roleManager.address]};
     } else if (hre.network.name === "arbitrum_dai") {
         params = {args: [usdPlusToken.address, "Wrapped DAI+", "wDAI+", 18, roleManager.address]};
     } else if (hre.network.name === "arbitrum_eth") {
