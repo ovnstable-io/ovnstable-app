@@ -1,15 +1,20 @@
-const { ethers } = require("hardhat");
-const { getContract, getPrice } = require("@overnight-contracts/common/utils/script-utils");
-const { createSkim, createSkimTo, createSkimToWithFee, createBribe, createBribeWithFee, createSync, createCustomBribe,
-    createCustom
-} = require("@overnight-contracts/common/utils/payoutListener");
-const { Roles } = require("@overnight-contracts/common/utils/roles");
-const { COMMON } = require("@overnight-contracts/common/utils/assets");
-
+const { ethers } = require('hardhat');
+const { getContract, getPrice } = require('@overnight-contracts/common/utils/script-utils');
+const {
+    createSkim,
+    createSkimTo,
+    createSkimToWithFee,
+    createBribe,
+    createBribeWithFee,
+    createSync,
+    createCustomBribe,
+    createCustom,
+} = require('@overnight-contracts/common/utils/payoutListener');
+const { Roles } = require('@overnight-contracts/common/utils/roles');
+const { COMMON } = require('@overnight-contracts/common/utils/assets');
 
 module.exports = async () => {
-
-    const payoutManager = await getContract("ArbitrumPayoutManager", 'arbitrum');
+    const payoutManager = await getContract('ArbitrumPayoutManager', 'arbitrum');
     const usdPlus = await getContract('UsdPlusToken', 'arbitrum');
     const usdtPlus = await getContract('UsdPlusToken', 'arbitrum_usdt');
     const ethPlus = await getContract('UsdPlusToken', 'arbitrum_eth');
@@ -28,7 +33,6 @@ module.exports = async () => {
     console.log('ArbitrumPayoutManager setting done');
 
     function pancakeswap() {
-
         let dex = 'PancakeSwap';
 
         let items = [];
@@ -46,12 +50,12 @@ module.exports = async () => {
         items.push(createSkim('0xf92768916015b5eBd9fa54D6BA10dA5864e24914', usdPlus.address, 'USD+/ARB', dex));
         items.push(createSkim('0xa1F9159e11aD48524c16C9bf10bf440815b03e6C', usdPlus.address, 'USD+/USDC', dex));
         items.push(createSkim('0xe37304F7489ed253b2A46A1d9DabDcA3d311D22E', usdPlus.address, 'USD+/WETH', dex));
+        items.push(createSkim('0xfE193D41Bf8EE691beC999bcE0981B6D06c89394', usdPlus.address, 'USD+/USDT', dex));
 
         return items;
     }
 
     function curve() {
-
         let dex = 'Curve';
 
         let items = [];
@@ -62,7 +66,6 @@ module.exports = async () => {
     }
 
     function wombat() {
-
         let dex = 'Wombat';
 
         let items = [];
@@ -72,7 +75,6 @@ module.exports = async () => {
     }
 
     function chronos() {
-
         let dex = 'Chronos';
 
         let items = [];
@@ -82,7 +84,6 @@ module.exports = async () => {
     }
 
     function traderjoe() {
-
         let dex = 'TraderJoe';
 
         let items = [];
@@ -93,7 +94,6 @@ module.exports = async () => {
     }
 
     function uniswap() {
-
         let dex = 'Uniswap';
 
         let items = [];
@@ -104,8 +104,6 @@ module.exports = async () => {
 
         return items;
     }
-
 };
 
 module.exports.tags = ['SettingArbitrumPayoutManager'];
-
