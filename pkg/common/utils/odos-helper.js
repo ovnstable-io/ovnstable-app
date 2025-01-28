@@ -67,8 +67,8 @@ async function getOdosRequest(request) {
     console.log("swapParams", swapParams);
 
     // @ts-ignore
-    const urlQuote = 'https://api.overnight.fi/root/odos/sor/quote/v2';
-    const urlAssemble = 'https://api.overnight.fi/root/odos/sor/assemble';
+    const urlQuote = 'https://backend.overnight.fi/odos/sor/quote/v2';
+    const urlAssemble = 'https://backend.overnight.fi/odos/sor/assemble';
     // const urlQuote = 'https://api.odos.xyz/sor/quote/v2';
     // const urlAssemble = 'https://api.odos.xyz/sor/assemble';
     let transaction;
